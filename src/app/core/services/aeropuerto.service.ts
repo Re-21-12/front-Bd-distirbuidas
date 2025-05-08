@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
 import { Aeropuerto } from '../models/aeropuerto';
@@ -13,7 +13,8 @@ export class AeropuertoService {
     headers: new HttpHeaders({ 'Content-Type': 'application/json' })
   };
 
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
+
 
   // Obtener todos los aeropuertos
   getAllAeropuertos(): Observable<Aeropuerto[]> {

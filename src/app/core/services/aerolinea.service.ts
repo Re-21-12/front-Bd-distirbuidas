@@ -1,5 +1,5 @@
 import { Aerolinea } from './../models/aerolinea';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
 import { environment } from '../../../environment'; // Asegúrate de tener la URL de tu backend aquí
@@ -11,10 +11,11 @@ import { environment } from '../../../environment'; // Asegúrate de tener la UR
 export class AerolineaService {
   private apiUrl = `${environment.apiUrl}aerolinea`; // Reemplaza con tu URL
 
-  constructor(private http: HttpClient) {}
+  private http = inject(HttpClient);
+
 
   // GET Todos
-  getAll(): Observable<Aerolinea[]> {
+  getAllAerolinea(): Observable<Aerolinea[]> {
     return this.http.get<Aerolinea[]>(this.apiUrl).pipe(
       catchError((error) => {
         console.error('Error al obtener aerolíneas:', error);
@@ -24,7 +25,7 @@ export class AerolineaService {
   }
 
   // GET por ID
-  getById(id: string): Observable<Aerolinea | null> {
+  getByIdAerolinea(id: string): Observable<Aerolinea | null> {
     return this.http.get<Aerolinea>(`${this.apiUrl}/${id}`).pipe(
       catchError((error) => {
         console.error(`Error al obtener aerolínea con ID ${id}:`, error);
@@ -34,7 +35,7 @@ export class AerolineaService {
   }
 
   // POST
-  create(aerolinea: Aerolinea): Observable<Aerolinea | null> {
+  createAerolinea(aerolinea: Aerolinea): Observable<Aerolinea | null> {
     return this.http.post<Aerolinea>(this.apiUrl, aerolinea).pipe(
       catchError((error) => {
         console.error('Error al crear aerolínea:', error);
@@ -44,7 +45,7 @@ export class AerolineaService {
   }
 
   // PUT
-  update(id: string, aerolinea: Aerolinea): Observable<boolean> {
+  updateAerolinea(id: string, aerolinea: Aerolinea): Observable<boolean> {
     return this.http.put<void>(`${this.apiUrl}/${id}`, aerolinea).pipe(
       catchError((error) => {
         console.error(`Error al actualizar aerolínea con ID ${id}:`, error);
@@ -55,7 +56,7 @@ export class AerolineaService {
   }
 
   // DELETE
-  delete(id: string): Observable<boolean> {
+  deleteAerolinea(id: string): Observable<boolean> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`).pipe(
       catchError((error) => {
         console.error(`Error al eliminar aerolínea con ID ${id}:`, error);

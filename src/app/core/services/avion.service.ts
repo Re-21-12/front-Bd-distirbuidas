@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
 import { Avion } from '../models/avion';
@@ -16,7 +16,8 @@ export class AvionService {
     })
   };
 
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
+
 
   /**
    * Obtiene todos los aviones

@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
 import { CorreoElectronico } from '../models/correo';
@@ -8,15 +8,15 @@ import { environment } from '../../../environment';
   providedIn: 'root'
 })
 export class CorreoElectronicoService {
-  private apiUrl = `${environment.apiUrl}/correo_electronico`;
+  private apiUrl = `${environment.apiUrl}correo_electronico`;
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
       'Accept': 'application/json'
     })
   };
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) { }
 
   /**
    * Obtiene todos los correos electrónicos
