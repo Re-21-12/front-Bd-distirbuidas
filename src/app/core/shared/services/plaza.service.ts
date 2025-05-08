@@ -1,8 +1,8 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
 
-import { environment } from '../../../environment';
+import { environment } from '../../../../environment';
 import { Plaza } from '../models/plaza';
 
 @Injectable({
@@ -17,7 +17,8 @@ export class PlazaService {
     })
   };
 
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
+
 
   /**
    * Obtiene todas las plazas

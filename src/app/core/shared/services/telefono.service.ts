@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
-import { environment } from '../../../environment';
+import { environment } from '../../../../environment';
 import { Telefono } from '../models/telefono';
 
 @Injectable({
@@ -16,7 +16,8 @@ export class TelefonoService {
     })
   };
 
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
+
 
   /**
    * Obtiene todos los teléfonos

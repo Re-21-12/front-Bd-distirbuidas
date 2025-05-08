@@ -5,8 +5,5 @@ export interface Vuelo {
   aeropuerto_origen:            number;
   aeropuerto_destino:           number;
   id_avion:                     number;
-  aeropuerto_destinoNavigation: null;
-  aeropuerto_origenNavigation:  null;
-  id_avionNavigation:           null;
-  reservas:                     any[];
+
 }

@@ -1,8 +1,8 @@
-import { Aerolinea } from './../models/aerolinea';
+import { Aerolinea } from '../models/aerolinea';
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
-import { environment } from '../../../environment'; // Asegúrate de tener la URL de tu backend aquí
+import { environment } from '../../../../environment'; // Asegúrate de tener la URL de tu backend aquí
  // Asegúrate de crear esta interfaz
 
 @Injectable({

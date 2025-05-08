@@ -4,6 +4,5 @@ export interface Avion {
   modelo:                 string;
   capacidad_total:        number;
   id_aerolinea:           string;
-  id_aerolineaNavigation: null;
-  vuelos:                 any[];
+
 }

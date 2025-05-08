@@ -5,7 +5,5 @@ export interface Reserva {
   fecha_reserva:          Date;
   estado:                 string;
   numero_vuelo:           string;
-  numero_vueloNavigation: null;
-  plaza:                  null;
-  id_pasajeros:           any[];
+
 }
