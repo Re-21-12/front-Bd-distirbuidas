@@ -31,7 +31,7 @@ aerolinea:{
       MaxLength: 10,
       MinLength: 3,
       Disabled: false,
-      TypeField: FieldType.Number
+      TypeField: FieldType.Text
     }
   ]
 
@@ -62,7 +62,7 @@ aeropuerto:{
         MaxLength: 10,
         MinLength: 3,
         Disabled: false,
-        TypeField: FieldType.Number
+        TypeField: FieldType.Text
       },
       {
         Id: 3,
@@ -116,7 +116,7 @@ avion:{
         MaxLength: 10,
         MinLength: 3,
         Disabled: false,
-        TypeField: FieldType.Number
+        TypeField: FieldType.Text
       },
       {
         Id: 3,
@@ -140,7 +140,7 @@ avion:{
         MaxLength: 10,
         MinLength: 3,
         Disabled: false,
-        TypeField: FieldType.Select
+        TypeField: FieldType.Text
       },
       {
         Id:5,
@@ -224,7 +224,7 @@ ciudad:{
           MaxLength: 10,
           MinLength: 3,
           Disabled: false,
-          TypeField: FieldType.Select
+          TypeField: FieldType.Text
         }
       ]
 },
@@ -332,7 +332,7 @@ pasajero:{
         MaxLength: 10,
         MinLength: 3,
         Disabled: false,
-        TypeField: FieldType.Number
+        TypeField: FieldType.Text
       },
       {
         Id: 7,
@@ -399,7 +399,7 @@ plaza:{
         MaxLength: 10,
         MinLength: 3,
         Disabled: false,
-        TypeField: FieldType.Number
+        TypeField: FieldType.Text
       },
     ]
 },
@@ -417,7 +417,7 @@ reserva: {
       MaxLength: 10,
       MinLength: 1,
       Disabled: false,
-      TypeField: FieldType.Number
+      TypeField: FieldType.Text
     },
     {
       Id: 2,
@@ -507,7 +507,7 @@ telefono: {
       MaxLength: 10,
       MinLength: 1,
       Disabled: false,
-      TypeField: FieldType.Number
+      TypeField: FieldType.Text
     }
   ]
 },

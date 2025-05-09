@@ -1,14 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
+import { Telefono } from '../../shared/models/telefono';
 import { environment } from '../../../../environment';
-import { Telefono } from '../models/telefono';
+import { BaseApiService } from '../interfaces/base-api';
 
 @Injectable({
   providedIn: 'root'
 })
-export class TelefonoService {
-  private apiUrl = `${environment.apiUrl}/telefono`;
+export class TelefonoService implements BaseApiService<Telefono> {
+  private apiUrl = `${environment.apiUrl}telefono`;
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -18,31 +19,50 @@ export class TelefonoService {
 
   private http = inject(HttpClient);
 
-
   /**
    * Obtiene todos los teléfonos
    */
-  getAllTelefonos(): Observable<Telefono[]> {
+  getAll(): Observable<Telefono[]> {
     return this.http.get<Telefono[]>(this.apiUrl).pipe(
       catchError(this.handleError<Telefono[]>('getAllTelefonos', []))
     );
   }
 
   /**
-   * Obtiene teléfonos por persona
+   * Obtiene un teléfono por su número
    */
-  getTelefonosByPersona(idPersona: number): Observable<Telefono[]> {
-    return this.http.get<Telefono[]>(`${this.apiUrl}/by-persona/${idPersona}`).pipe(
-      catchError(this.handleError<Telefono[]>('getTelefonosByPersona', []))
+  getById(numero: string): Observable<Telefono | null> {
+    return this.http.get<Telefono>(`${this.apiUrl}/${numero}`).pipe(
+      catchError(this.handleError<Telefono>(`getTelefonoByNumero numero=${numero}`))
     );
   }
 
   /**
-   * Obtiene un teléfono por su número
+   * Crea un nuevo teléfono
    */
-  getTelefonoByNumero(numero: string): Observable<Telefono | undefined> {
-    return this.http.get<Telefono>(`${this.apiUrl}/${numero}`).pipe(
-      catchError(this.handleError<Telefono>(`getTelefonoByNumero numero=${numero}`))
+  create(telefono: Telefono): Observable<Telefono> {
+    return this.http.post<Telefono>(this.apiUrl, telefono, this.httpOptions).pipe(
+      catchError(this.handleError<Telefono>('createTelefono'))
+    );
+  }
+
+  /**
+   * Actualiza un teléfono existente
+   */
+  update(numero: string, telefono: Telefono): Observable<boolean> {
+    return this.http.put(`${this.apiUrl}/${numero}`, telefono, this.httpOptions).pipe(
+      map(() => true),
+      catchError(this.handleError<boolean>('updateTelefono'))
+    );
+  }
+
+  /**
+   * Elimina un teléfono
+   */
+  delete(numero: string): Observable<boolean> {
+    return this.http.delete(`${this.apiUrl}/${numero}`, this.httpOptions).pipe(
+      map(() => true),
+      catchError(this.handleError<boolean>('deleteTelefono'))
     );
   }
 
@@ -52,49 +72,6 @@ export class TelefonoService {
   validarFormatoTelefono(numero: string): boolean {
     const regex = /^[0-9]{10,15}$/; // Ajusta según tus requisitos
     return regex.test(numero);
-  }
-
-  /**
-   * Crea un nuevo teléfono
-   */
-  createTelefono(telefono: Telefono): Observable<Telefono> {
-    if (!this.validarFormatoTelefono(telefono.numero_telefono)) {
-      return throwError(() => new Error('Formato de teléfono inválido'));
-    }
-
-    return this.http.post<Telefono>(this.apiUrl, telefono, this.httpOptions).pipe(
-      catchError(this.handleError<Telefono>('createTelefono'))
-    );
-  }
-
-  /**
-   * Actualiza un teléfono existente
-   */
-  updateTelefono(telefono: Telefono): Observable<boolean> {
-    return this.http.put(`${this.apiUrl}/${telefono.numero_telefono}`, telefono, this.httpOptions).pipe(
-      map(() => true),
-      catchError(this.handleError<boolean>('updateTelefono'))
-    );
-  }
-
-  /**
-   * Marca un teléfono como principal
-   */
-  setTelefonoPrincipal(numero: string, idPersona: number): Observable<boolean> {
-    return this.http.patch(`${this.apiUrl}/${numero}/principal`, { idPersona }, this.httpOptions).pipe(
-      map(() => true),
-      catchError(this.handleError<boolean>('setTelefonoPrincipal'))
-    );
-  }
-
-  /**
-   * Elimina un teléfono
-   */
-  deleteTelefono(numero: string): Observable<boolean> {
-    return this.http.delete(`${this.apiUrl}/${numero}`, this.httpOptions).pipe(
-      map(() => true),
-      catchError(this.handleError<boolean>('deleteTelefono'))
-    );
   }
 
   /**

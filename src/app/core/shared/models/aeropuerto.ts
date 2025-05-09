@@ -1,4 +1,4 @@
 export interface Aeropuerto {
-  id_aerolinea: string;
+  id_aeropuerto: string;
   nombre:       string;
 }

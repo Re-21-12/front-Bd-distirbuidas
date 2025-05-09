@@ -1,14 +1,15 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
-import { Vuelo } from '../models/vuelo';
+import { Reserva } from '../../shared/models/reserva';
 import { environment } from '../../../../environment';
+import { BaseApiService } from '../interfaces/base-api';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VueloService {
-  private apiUrl = `${environment.apiUrl}/vuelo`;
+export class VueloService implements BaseApiService<Reserva> {
+  private apiUrl = `${environment.apiUrl}/reserva`;
   private httpOptions = {
     headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -19,79 +20,49 @@ export class VueloService {
   private http = inject(HttpClient);
 
   /**
-   * Obtiene todos los vuelos
+   * Obtiene todas las reservas
    */
-  getAllVuelos(): Observable<Vuelo[]> {
-    return this.http.get<Vuelo[]>(this.apiUrl).pipe(
-      catchError(this.handleError<Vuelo[]>('getAllVuelos', []))
+  getAll(): Observable<Reserva[]> {
+    return this.http.get<Reserva[]>(this.apiUrl).pipe(
+      catchError(this.handleError<Reserva[]>('getAll', []))
     );
   }
 
   /**
-   * Obtiene vuelos por aerolínea
+   * Obtiene una reserva por ID
    */
-  getVuelosByAerolinea(idAerolinea: string): Observable<Vuelo[]> {
-    return this.http.get<Vuelo[]>(`${this.apiUrl}/by-aerolinea/${idAerolinea}`).pipe(
-      catchError(this.handleError<Vuelo[]>('getVuelosByAerolinea', []))
+  getById(id: string): Observable<Reserva | null> {
+    return this.http.get<Reserva>(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.handleError<Reserva>(`getById id=${id}`))
     );
   }
 
   /**
-   * Busca vuelos por origen y destino
+   * Crea una nueva reserva
    */
-  searchVuelos(origen: string, destino: string, fecha: string): Observable<Vuelo[]> {
-    return this.http.get<Vuelo[]>(
-      `${this.apiUrl}/search?origen=${origen}&destino=${destino}&fecha=${fecha}`
-    ).pipe(
-      catchError(this.handleError<Vuelo[]>('searchVuelos', []))
+  create(reserva: Reserva): Observable<Reserva> {
+    return this.http.post<Reserva>(this.apiUrl, reserva, this.httpOptions).pipe(
+      catchError(this.handleError<Reserva>('create'))
     );
   }
 
   /**
-   * Obtiene un vuelo por su número
+   * Actualiza una reserva existente
    */
-  getVueloByNumero(numero: string): Observable<Vuelo | undefined> {
-    return this.http.get<Vuelo>(`${this.apiUrl}/${numero}`).pipe(
-      catchError(this.handleError<Vuelo>(`getVueloByNumero numero=${numero}`))
-    );
-  }
-
-  /**
-   * Crea un nuevo vuelo
-   */
-  createVuelo(vuelo: Vuelo): Observable<Vuelo> {
-    return this.http.post<Vuelo>(this.apiUrl, vuelo, this.httpOptions).pipe(
-      catchError(this.handleError<Vuelo>('createVuelo'))
-    );
-  }
-
-  /**
-   * Actualiza un vuelo existente
-   */
-  updateVuelo(vuelo: Vuelo): Observable<boolean> {
-    return this.http.put(`${this.apiUrl}/${vuelo.numero_vuelo}`, vuelo, this.httpOptions).pipe(
+  update(id: string, reserva: Reserva): Observable<boolean> {
+    return this.http.put(`${this.apiUrl}/${id}`, reserva, this.httpOptions).pipe(
       map(() => true),
-      catchError(this.handleError<boolean>('updateVuelo'))
+      catchError(this.handleError<boolean>('update'))
     );
   }
 
   /**
-   * Cambia el estado de un vuelo
+   * Elimina una reserva
    */
-  cambiarEstadoVuelo(numero: string, nuevoEstado: string): Observable<boolean> {
-    return this.http.patch(`${this.apiUrl}/${numero}/estado`, { estado: nuevoEstado }, this.httpOptions).pipe(
+  delete(id: string): Observable<boolean> {
+    return this.http.delete(`${this.apiUrl}/${id}`, this.httpOptions).pipe(
       map(() => true),
-      catchError(this.handleError<boolean>('cambiarEstadoVuelo'))
-    );
-  }
-
-  /**
-   * Elimina un vuelo
-   */
-  deleteVuelo(numero: string): Observable<boolean> {
-    return this.http.delete(`${this.apiUrl}/${numero}`, this.httpOptions).pipe(
-      map(() => true),
-      catchError(this.handleError<boolean>('deleteVuelo'))
+      catchError(this.handleError<boolean>('delete'))
     );
   }
 

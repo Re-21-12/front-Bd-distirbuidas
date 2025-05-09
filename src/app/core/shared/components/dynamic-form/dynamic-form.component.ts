@@ -95,19 +95,24 @@ const MATERIAL_IMPORT = [
 export class DynamicFormComponent implements OnInit {
 
   private destroyRef$ = inject(DestroyRef)
-
   _fieldControlService = inject(FormBuilderService)
 
 
   @Input() inputForm : Observable<FormTemplateModel> | undefined
+  @Input() defaultData : Observable<any> | undefined
+
+
 
   formData = signal<FormTemplateModel>({} as FormTemplateModel)
 
-  form: FormGroup = new FormGroup({});
+  formSubmit = output<string>()
+  PrimaryButtonText = input<string>()
+  SecondaryButtonText = input<string>()
 
+
+  form: FormGroup = new FormGroup({});
   maxDateValidation: DateTime = DateTime.now()
 
-  formSubmit = output<string>()
 
 
 
@@ -127,6 +132,16 @@ export class DynamicFormComponent implements OnInit {
       },
       error: (err) => console.error('Error loading form data', err)
     });
+
+    this.defaultData?.pipe(
+      takeUntilDestroyed(this.destroyRef$)
+    ).subscribe({
+      next: (data: any) => {
+        console.log('defaultData', data)
+          this.form.patchValue(data);
+      }
+    });
+
   }
 
 
@@ -137,6 +152,10 @@ export class DynamicFormComponent implements OnInit {
   configureForm = () => {
     console.log(this.formData().Fields)
     this.form = this._fieldControlService.toFormGroup(this.formData().Fields, this.formData());
+
+
+
+
   }
 
 
@@ -250,7 +269,9 @@ export class DynamicFormComponent implements OnInit {
 
 
   }
-
+  cleanForm = () =>{
+    this.form.reset()
+  }
 
 
 }

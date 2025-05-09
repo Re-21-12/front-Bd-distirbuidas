@@ -4,14 +4,19 @@
 
     <!-- Selector de formulario -->
     <div class="border border-white rounded-xl p-4 text-center ">
-      <app-dynamic-form [inputForm]="formSelect" (formSubmit)="listenValue($event)"/>
+      <app-dynamic-form [inputForm]="formSelect" (formSubmit)="listenValue($event)" [PrimaryButtonText]="'Seleccionar'"/>
     </div>
 
     <!-- Área de edición -->
     <div class="flex-1 border border-white rounded-xl p-4 flex flex-col  overflow-y-auto">
-      <div class="mb-4 text-center">editar/crear/detalle</div>
+      <div class="mb-4 text-center">{{mode()}}</div>
       <div class="flex-1 border border-white mb-4">
-        <app-dynamic-form [inputForm]="displayForm"/>
+        <app-dynamic-form
+        [inputForm]="displayForm"
+         [defaultData]="defaultFormData$"
+         (formSubmit)="submitDisplay($event)"
+         [PrimaryButtonText]="'Guardar'"
+         [SecondaryButtonText]="'Limpiar'"/>
       </div>
     </div>
 
@@ -20,18 +25,7 @@
   <!-- Columna derecha -->
   <div class="flex-1 border border-white rounded-xl p-4 flex flex-col gap-4">
     <!-- Repetir elemento de lista -->
-    <div class="flex justify-between items-center border-b border-white pb-2">
-      <div>Elemento 1</div>
-      <button class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded">Acción</button>
-    </div>
-    <div class="flex justify-between items-center border-b border-white pb-2">
-      <div>Elemento 2</div>
-      <button class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded">Acción</button>
-    </div>
-    <div class="flex justify-between items-center border-b border-white pb-2">
-      <div>Elemento 3</div>
-      <button class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded">Acción</button>
-    </div>
+<app-dynamic-table [displayedColumns$]="columnsSelected$" [dataSource$]="dataSelected$" (emitData)="listenSendData($event)"/>
     <!-- Puedes duplicar más según sea necesario -->
   </div>
 </div>

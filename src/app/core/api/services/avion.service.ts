@@ -1,13 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
-import { Avion } from '../models/avion';
+import { Avion } from '../../shared/models/avion';
 import { environment } from '../../../../environment';
+import { BaseApiService } from '../interfaces/base-api';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AvionService {
+export class AvionService implements BaseApiService<Avion> {
   private apiUrl = `${environment.apiUrl}avion`;
   private httpOptions = {
     headers: new HttpHeaders({
@@ -22,7 +23,7 @@ export class AvionService {
   /**
    * Obtiene todos los aviones
    */
-  getAllAviones(): Observable<Avion[]> {
+  getAll(): Observable<Avion[]> {
     return this.http.get<Avion[]>(this.apiUrl).pipe(
       catchError(this.handleError<Avion[]>('getAllAviones', []))
     );
@@ -31,25 +32,17 @@ export class AvionService {
   /**
    * Obtiene un avión por ID
    */
-  getAvionById(id: number): Observable<Avion | undefined> {
+  getById(id: string): Observable<Avion | null> {
     return this.http.get<Avion>(`${this.apiUrl}/${id}`).pipe(
       catchError(this.handleError<Avion>(`getAvionById id=${id}`))
     );
   }
 
-  /**
-   * Obtiene aviones por aerolínea
-   */
-  getAvionesByAerolinea(idAerolinea: number): Observable<Avion[]> {
-    return this.http.get<Avion[]>(`${this.apiUrl}/by-aerolinea/${idAerolinea}`).pipe(
-      catchError(this.handleError<Avion[]>('getAvionesByAerolinea', []))
-    );
-  }
 
   /**
    * Crea un nuevo avión
    */
-  createAvion(avion: Avion): Observable<Avion> {
+  create(avion: Avion): Observable<Avion> {
     return this.http.post<Avion>(this.apiUrl, avion, this.httpOptions).pipe(
       catchError(this.handleError<Avion>('createAvion'))
     );
@@ -58,8 +51,8 @@ export class AvionService {
   /**
    * Actualiza un avión existente
    */
-  updateAvion(avion: Avion): Observable<boolean> {
-    return this.http.put(`${this.apiUrl}/${avion.id_avion}`, avion, this.httpOptions).pipe(
+  update(id: string,avion: Avion): Observable<boolean> {
+    return this.http.put(`${this.apiUrl}/${id}`, avion, this.httpOptions).pipe(
       map(() => true),
       catchError(this.handleError<boolean>('updateAvion'))
     );
@@ -68,7 +61,7 @@ export class AvionService {
   /**
    * Elimina un avión
    */
-  deleteAvion(id: number): Observable<boolean> {
+  delete(id: string): Observable<boolean> {
     return this.http.delete(`${this.apiUrl}/${id}`, this.httpOptions).pipe(
       map(() => true),
       catchError(this.handleError<boolean>('deleteAvion'))

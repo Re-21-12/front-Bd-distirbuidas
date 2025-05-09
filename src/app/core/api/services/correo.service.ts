@@ -1,13 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
-import { CorreoElectronico } from '../models/correo';
+import { Correo } from '../../shared/models/correo';
 import { environment } from '../../../../environment';
+import { BaseApiService } from '../interfaces/base-api';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CorreoElectronicoService {
+export class CorreoElectronicoService implements BaseApiService<Correo> {
   private apiUrl = `${environment.apiUrl}correo_electronico`;
   private httpOptions = {
     headers: new HttpHeaders({
@@ -17,69 +18,51 @@ export class CorreoElectronicoService {
   };
   private http = inject(HttpClient);
 
-
   /**
    * Obtiene todos los correos electrónicos
    */
-  getAllCorreos(): Observable<CorreoElectronico[]> {
-    return this.http.get<CorreoElectronico[]>(this.apiUrl).pipe(
-      catchError(this.handleError<CorreoElectronico[]>('getAllCorreos', []))
-    );
-  }
-
-  /**
-   * Obtiene correos por persona
-   */
-  getCorreosByPersona(idPersona: number): Observable<CorreoElectronico[]> {
-    return this.http.get<CorreoElectronico[]>(`${this.apiUrl}/by-persona/${idPersona}`).pipe(
-      catchError(this.handleError<CorreoElectronico[]>('getCorreosByPersona', []))
+  getAll(): Observable<Correo[]> {
+    return this.http.get<Correo[]>(this.apiUrl).pipe(
+      catchError(this.handleError<Correo[]>('getAll', []))
     );
   }
 
   /**
    * Obtiene un correo electrónico por dirección
    */
-  getCorreoByEmail(correo: string): Observable<CorreoElectronico | undefined> {
-    return this.http.get<CorreoElectronico>(`${this.apiUrl}/${correo}`).pipe(
-      catchError(this.handleError<CorreoElectronico>(`getCorreoByEmail correo=${correo}`))
+  getById(correo: string): Observable<Correo | null> {
+    return this.http.get<Correo>(`${this.apiUrl}/${correo}`).pipe(
+      catchError(this.handleError<Correo>(`getById correo=${correo}`))
     );
   }
 
   /**
    * Crea un nuevo correo electrónico
    */
-  createCorreo(correo: CorreoElectronico): Observable<CorreoElectronico> {
-    return this.http.post<CorreoElectronico>(this.apiUrl, correo, this.httpOptions).pipe(
-      catchError(this.handleError<CorreoElectronico>('createCorreo'))
+  create(correo: Correo): Observable<Correo> {
+    return this.http.post<Correo>(this.apiUrl, correo, this.httpOptions).pipe(
+      catchError(this.handleError<Correo>('create'))
     );
   }
 
   /**
    * Actualiza un correo electrónico existente
    */
-  updateCorreo(correo: CorreoElectronico): Observable<boolean> {
-    return this.http.put(`${this.apiUrl}/${correo.correo}`, correo, this.httpOptions).pipe(
+  update(id:string, correo: Correo): Observable<boolean> {
+    return this.http.put(`${this.apiUrl}/${id}`, correo, this.httpOptions).pipe(
       map(() => true),
-      catchError(this.handleError<boolean>('updateCorreo'))
+      catchError(this.handleError<boolean>('update'))
     );
   }
 
   /**
    * Elimina un correo electrónico
    */
-  deleteCorreo(correo: string): Observable<boolean> {
+  delete(correo: string): Observable<boolean> {
     return this.http.delete(`${this.apiUrl}/${correo}`, this.httpOptions).pipe(
       map(() => true),
-      catchError(this.handleError<boolean>('deleteCorreo'))
+      catchError(this.handleError<boolean>('delete'))
     );
-  }
-
-  /**
-   * Valida formato de correo electrónico
-   */
-  validarFormatoCorreo(correo: string): boolean {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(correo);
   }
 
   /**

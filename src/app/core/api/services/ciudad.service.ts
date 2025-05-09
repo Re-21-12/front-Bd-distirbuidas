@@ -1,13 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of } from 'rxjs';
-import { Ciudad } from '../models/ciudad';
+import { Ciudad } from '../../shared/models/ciudad';
 import { environment } from '../../../../environment';
+import { BaseApiService } from '../interfaces/base-api';
 
 @Injectable({
   providedIn: 'root'
 })
-export class CiudadService {
+export class CiudadService implements BaseApiService<Ciudad> {
   private apiUrl = `${environment.apiUrl}ciudad`;
   private httpOptions = {
     headers: new HttpHeaders({
@@ -18,60 +19,50 @@ export class CiudadService {
 
   private http = inject(HttpClient);
 
-
   /**
    * Obtiene todas las ciudades
    */
-  getAllCiudades(): Observable<Ciudad[]> {
+  getAll(): Observable<Ciudad[]> {
     return this.http.get<Ciudad[]>(this.apiUrl).pipe(
-      catchError(this.handleError<Ciudad[]>('getAllCiudades', []))
+      catchError(this.handleError<Ciudad[]>('getAll', []))
     );
   }
 
   /**
    * Obtiene una ciudad por su código
    */
-  getCiudadById(codigo: string): Observable<Ciudad | undefined> {
-    return this.http.get<Ciudad>(`${this.apiUrl}/${codigo}`).pipe(
-      catchError(this.handleError<Ciudad>(`getCiudadById codigo=${codigo}`))
-    );
-  }
-
-  /**
-   * Busca ciudades por nombre
-   */
-  searchCiudades(term: string): Observable<Ciudad[]> {
-    return this.http.get<Ciudad[]>(`${this.apiUrl}/search?nombre=${term}`).pipe(
-      catchError(this.handleError<Ciudad[]>('searchCiudades', []))
+  getById(id: string): Observable<Ciudad | null> {
+    return this.http.get<Ciudad>(`${this.apiUrl}/${id}`).pipe(
+      catchError(this.handleError<Ciudad>(`getById id=${id}`))
     );
   }
 
   /**
    * Crea una nueva ciudad
    */
-  createCiudad(ciudad: Ciudad): Observable<Ciudad> {
+  create(ciudad: Ciudad): Observable<Ciudad> {
     return this.http.post<Ciudad>(this.apiUrl, ciudad, this.httpOptions).pipe(
-      catchError(this.handleError<Ciudad>('createCiudad'))
+      catchError(this.handleError<Ciudad>('create'))
     );
   }
 
   /**
    * Actualiza una ciudad existente
    */
-  updateCiudad(ciudad: Ciudad): Observable<boolean> {
-    return this.http.put(`${this.apiUrl}/${ciudad.codigo_ciudad}`, ciudad, this.httpOptions).pipe(
+  update(id: string, ciudad: Ciudad): Observable<boolean> {
+    return this.http.put(`${this.apiUrl}/${id}`, ciudad, this.httpOptions).pipe(
       map(() => true),
-      catchError(this.handleError<boolean>('updateCiudad'))
+      catchError(this.handleError<boolean>('update'))
     );
   }
 
   /**
    * Elimina una ciudad
    */
-  deleteCiudad(codigo: string): Observable<boolean> {
-    return this.http.delete(`${this.apiUrl}/${codigo}`, this.httpOptions).pipe(
+  delete(id: string): Observable<boolean> {
+    return this.http.delete(`${this.apiUrl}/${id}`, this.httpOptions).pipe(
       map(() => true),
-      catchError(this.handleError<boolean>('deleteCiudad'))
+      catchError(this.handleError<boolean>('delete'))
     );
   }
 
