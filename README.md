@@ -1,4 +1,11 @@
-# VuelosFront
+
+# Diagrama inicial
+![image](https://github.com/user-attachments/assets/c169856d-f29b-469f-b22a-a916ba269fbd)
+
+# Entrega final
+![image](https://github.com/user-attachments/assets/0144f020-a737-4743-8f9a-f7d4cac858f6)
+
+# VuelosFront (Despliegue)
 
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.2.10.
 
