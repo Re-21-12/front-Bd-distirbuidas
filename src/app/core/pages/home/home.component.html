@@ -1,1 +1,37 @@
-<p>home works!</p>
+<div class="flex h-full bg-gradient-to-r from-indigo-500 from-10% via-sky-500 via-30% to-emerald-500 to-90% text-white gap-4 p-4">
+  <!-- Columna izquierda -->
+  <div class="flex-1 flex flex-col gap-4">
+
+    <!-- Selector de formulario -->
+    <div class="border border-white rounded-xl p-4 text-center ">
+      <app-dynamic-form [inputForm]="formSelect" (formSubmit)="listenValue($event)"/>
+    </div>
+
+    <!-- Área de edición -->
+    <div class="flex-1 border border-white rounded-xl p-4 flex flex-col  overflow-y-auto">
+      <div class="mb-4 text-center">editar/crear/detalle</div>
+      <div class="flex-1 border border-white mb-4">
+        <app-dynamic-form [inputForm]="displayForm"/>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Columna derecha -->
+  <div class="flex-1 border border-white rounded-xl p-4 flex flex-col gap-4">
+    <!-- Repetir elemento de lista -->
+    <div class="flex justify-between items-center border-b border-white pb-2">
+      <div>Elemento 1</div>
+      <button class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded">Acción</button>
+    </div>
+    <div class="flex justify-between items-center border-b border-white pb-2">
+      <div>Elemento 2</div>
+      <button class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded">Acción</button>
+    </div>
+    <div class="flex justify-between items-center border-b border-white pb-2">
+      <div>Elemento 3</div>
+      <button class="px-4 py-2 bg-white bg-opacity-20 hover:bg-opacity-30 rounded">Acción</button>
+    </div>
+    <!-- Puedes duplicar más según sea necesario -->
+  </div>
+</div>

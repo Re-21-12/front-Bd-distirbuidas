@@ -14,14 +14,16 @@ export interface  FieldTemplateModel {
   IsRequired: boolean;
   IsEditable: boolean;
   Hidden: boolean;
-  MaxLength: number;
-  MinLength: number;
+  MaxLength?: number;
+  MinLength?: number;
   Disabled: boolean;
+  Placeholder?: string;
   Max?: number;
   Min?: number;
   Rules?: Validators[]
-  DefaultValue?: string | boolean | number;
+  DefaultValue?: string | boolean | number | Date | [];
   TypeField: FieldType;
+  Options?: any;
 }
 export enum FieldType {
   Text = 'text',
@@ -39,4 +41,6 @@ export enum FieldType {
   Color = 'color',
   Range = 'range',
   Tel = 'tel',
+  Decimal = 'decimal',
+  Slidetoggle = 'slidetoggle',
 }
